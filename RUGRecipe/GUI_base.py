@@ -1,12 +1,32 @@
 import string
+import pandas as pd
+import numpy as np
 from bs4 import BeautifulSoup
 from tkinter import *  # import the graphical library
 from tkinter import ttk
 from tkinter import messagebox
+from xlsxwriter import *
+from openpyxl import *
+
+
+def output():  # Pandas application to process and output data in Excel
+    recipe_return = {'Recipe Name': ['Recipe 1', 'Recipe 2'],  # we need to change this to the scrape variables?
+                     'Ingredient 1': ['Ingredient name 1', 'Ingredient name 2'],
+                     'Ingredient 2': ['Ingredient name 1', 'Ingredient name 2']
+                     }
+    df = pd.DataFrame(recipe_return, columns=['Recipe Name', 'Ingredient 1', 'Ingredient 2'])
+    writer = pd.ExcelWriter('recipe_overview.xlsx', engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Overview')
+    writer.save()
+    print(df)
+
+
+def variation():  # planned to allow the radio buttons to decide on way of searching
+    str(var.get())
 
 
 class MainGUI:
-    def __init__(self, master):
+    def __init__(self, master):  # creates the GUI interface
         self.master = master
         master.title("Recipe Suggestion")
         root.geometry('330x180')
@@ -36,9 +56,9 @@ class MainGUI:
         self.search_button.grid(row=5, column=1, padx=5, pady=0)
 
         self.misc1 = Radiobutton(root, text="use all entered ingredients", variable=var, value=1,
-                                 command=self.variation).grid(row=6, column=0, padx=5)
+                                 command=variation).grid(row=6, column=0, padx=5)
         self.misc2 = Radiobutton(root, text="suggest an ingredient", variable=var, value=2,
-                                 command=self.variation).grid(row=6, column=1)
+                                 command=variation).grid(row=6, column=1)
 
     def inquire(self):  # action after search button got pressed
         if len(self.ingredient_item1.get()) == 0:
@@ -50,14 +70,16 @@ class MainGUI:
                                                       "you require at least 3 ingredients, You can let us suggest an "
                                                       "ingredient by clicking on 'suggest an ingredient'")
 
-        elif len(self.ingredient_item3.get()) == 0:
+        elif len(self.ingredient_item3.get()) == 0 and len(self.ingredient_item2.get()) == 0 or \
+                len(self.ingredient_item1.get()) == 0:
             messagebox.showinfo("Missing ingredient", "No information has been entered in all ingredient boxes, "
                                                       "you require at least 3 ingredients, You can let us suggest an "
                                                       "ingredient by clicking on 'suggest an ingredient'")
 
-    @staticmethod
-    def variation():
-        selection = str(var.get())
+        output()  # runs the output DEF which is comprised of all Pandas / XLSX writer
+
+    def scraper(self):
+        pass
 
 
 root = Tk()
