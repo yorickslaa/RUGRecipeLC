@@ -39,7 +39,10 @@ def launch(search_command, database="recipes.csv"):  # looks for scraped recipe 
             break
 
     return my_result
-    #  webbrowser.open("google.com", new=0, autoraise=True)
+
+
+def open_recipe():  # opens the selected recipe
+    webbrowser.open("google.com", new=0, autoraise=True)
 
 
 def adding():  # allows user to add an ingredient to the list
@@ -47,11 +50,11 @@ def adding():  # allows user to add an ingredient to the list
     entry_box_ingredient.delete(0, END)
 
 
-def clearing():  # allows user to remove one ingredient
+def clear_select():  # allows user to remove one ingredient
     listbox_overview.delete(0, END)
 
 
-def clear_select():  # allows user to clear all ingredients
+def clearing():  # allows user to clear all ingredients
     listbox_overview.delete(ANCHOR)
 
 
@@ -75,9 +78,10 @@ listbox_recipes = Listbox(root, width=43, height=15, selectmode='single')
 
 # Buttons GUI
 button_add = Button(root, text="add ingredient", command=adding)
-button_access = Button(root, text="Search recipes", command=launch, height=1, width=35)
-button_clear = Button(root, text="remove all ingredients", command=clearing)
-button_remove = Button(root, text="remove selected ingredient", command=clear_select)
+button_access = Button(root, text="Search recipes", command=launch)
+button_clear = Button(root, text="remove all ingredients", command=clear_select)
+button_remove = Button(root, text="remove selected ingredient", command=clearing)
+button_open_recipe = Button(root, text="Open selected recipe", command=open_recipe, width=36)
 
 # Entry box GUI
 entry_box_ingredient = Entry(root, textvariable=temp, width=40)
@@ -95,7 +99,8 @@ entry_box_ingredient.place(x=10, y=305)
 button_add.place(x=275, y=300)
 button_remove.place(x=380, y=300)
 button_clear.place(x=10, y=340)
-button_access.place(x=275, y=340)
+button_access.place(x=150, y=340)
+button_open_recipe.place(x=275, y=340)
 
 # List boxes
 listbox_overview.place(x=10, y=40)
@@ -103,5 +108,3 @@ listbox_recipes.place(x=275, y=40)
 
 # loop the program, note: this must be the final line of our coding!
 root.mainloop()
-
-
